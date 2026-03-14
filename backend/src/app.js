@@ -3,10 +3,21 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://interview-ai-bice-tau.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "http://interview-ai-bice-tau.vercel.app",
-    credentials: true, // Allow cookies to be sent
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   }),
 );
 app.use(express.json());
