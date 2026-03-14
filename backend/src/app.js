@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors(
     {
-        origin: 'http://localhost:5173', // Your frontend URL
+        origin: "http://interview-ai-bice-tau.vercel.app/" ,
         credentials: true, // Allow cookies to be sent
     }
 ));
