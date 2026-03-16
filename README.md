@@ -205,7 +205,7 @@ MongoDB Atlas
 
 Shriram Patil
 
-React Native / MERN Stack Developer
+React js / MERN Stack Developer
 
 LinkedIn: www.linkedin.com/in/shriram-patil-03baa6141
 GitHub: https://github.com/shriram24P
