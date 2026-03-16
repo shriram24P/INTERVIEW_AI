@@ -50,6 +50,5 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching user info: ", error);
-    toast.error(error.message);
   }
 });
