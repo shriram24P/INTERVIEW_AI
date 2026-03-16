@@ -10,7 +10,9 @@ import {
 const Interview = () => {
   const [activeSection, setActiveSection] = useState("technical");
   const [expandedQuestions, setExpandedQuestions] = useState({});
+
   const { report, loading } = useSelector((state) => state.interview);
+
   const dispatch = useDispatch();
   const { interviewId } = useParams();
 
@@ -20,17 +22,14 @@ const Interview = () => {
     }
   }, [dispatch, interviewId]);
 
-
-  // Show error or no data state
   if (!report) {
     return (
-      <div className="h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 flex items-center justify-center">
         <div className="text-white text-lg">No interview report found</div>
       </div>
     );
   }
 
-  // Now it's safe to access properties with optional chaining as backup
   const currentQuestions =
     activeSection === "technical"
       ? report?.interviewReport?.technicalQuestions || []
@@ -61,193 +60,171 @@ const Interview = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 flex overflow-hidden">
-      {/* Left Sidebar */}
-      <div className="w-58 bg-slate-900/50 border-r border-slate-700 p-4 flex flex-col">
-        <div className="mb-6">
-          <h3 className="text-xs font-bold text-gray-400 tracking-wider mb-4">
-            SECTIONS
-          </h3>
-          <div className="space-y-2">
-            <button
-              onClick={() => {
-                setActiveSection("technical");
-                setExpandedQuestions({});
-              }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                activeSection === "technical"
-                  ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
-                  : "text-gray-400 hover:bg-slate-700/30"
-              }`}
-            >
-              <Code2 size={18} />
-              Technical Questions
-            </button>
-            <button
-              onClick={() => {
-                setActiveSection("behavioral");
-                setExpandedQuestions({});
-              }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                activeSection === "behavioral"
-                  ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
-                  : "text-gray-400 hover:bg-slate-700/30"
-              }`}
-            >
-              <Brain size={18} />
-              Behavioral Questions
-            </button>
-            <button
-              onClick={() => {
-                setActiveSection("roadmap");
-                setExpandedQuestions({});
-              }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                activeSection === "roadmap"
-                  ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
-                  : "text-gray-400 hover:bg-slate-700/30"
-              }`}
-            >
-              <Map size={18} />
-              Road Map
-            </button>
-            <button
-              onClick={getResumePdf}
-              disabled={loading}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2
-    ${
-      loading
-        ? "bg-gray-600 cursor-not-allowed"
-        : "bg-pink-600 hover:bg-pink-700"
-    }`}
-            >
-              {loading ? (
-                <>
-                  <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
-                  Generating...
-                </>
-              ) : (
-               <span>📄 Download AI Resume</span>
-              )}
-            </button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 flex flex-col md:flex-row">
+      {/* LEFT SIDEBAR */}
+      <div className="w-full md:w-64 bg-slate-900/50 border-b md:border-b-0 md:border-r border-slate-700 p-4 flex md:flex-col overflow-x-auto">
+        <div className="flex md:flex-col gap-2 w-full">
+          <button
+            onClick={() => {
+              setActiveSection("technical");
+              setExpandedQuestions({});
+            }}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+              activeSection === "technical"
+                ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
+                : "text-gray-400 hover:bg-slate-700/30"
+            }`}
+          >
+            <Code2 size={18} />
+            Technical
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveSection("behavioral");
+              setExpandedQuestions({});
+            }}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+              activeSection === "behavioral"
+                ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
+                : "text-gray-400 hover:bg-slate-700/30"
+            }`}
+          >
+            <Brain size={18} />
+            Behavioral
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveSection("roadmap");
+              setExpandedQuestions({});
+            }}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+              activeSection === "roadmap"
+                ? "bg-pink-600/20 text-pink-400 border border-pink-600/30"
+                : "text-gray-400 hover:bg-slate-700/30"
+            }`}
+          >
+            <Map size={18} />
+            Roadmap
+          </button>
+
+          <button
+            onClick={getResumePdf}
+            disabled={loading}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition whitespace-nowrap ${
+              loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-pink-600 hover:bg-pink-700"
+            }`}
+          >
+            {loading ? "Generating..." : "📄 AI Resume"}
+          </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 border-r border-slate-700 p-6 overflow-y-auto">
+      {/* MAIN CONTENT */}
+      <div className="flex-1 p-4 md:p-6 overflow-y-auto">
         {activeSection === "roadmap" ? (
           <>
-            {/* Roadmap Header */}
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-white mb-1">
+              <h1 className="text-xl md:text-2xl font-bold text-white">
                 Preparation Road Map
               </h1>
               <p className="text-sm text-gray-400">7-day plan</p>
             </div>
 
-            {/* Timeline - Add null check */}
             <div className="relative">
-              {report?.interviewReport?.preparationPlan &&
-                report?.interviewReport?.preparationPlan.map((day, idx) => (
-                  <div key={idx} className="flex gap-6 mb-8 relative">
-                    {/* Vertical Line */}
-                    {idx !==
-                      report?.interviewReport?.preparationPlan.length - 1 && (
-                      <div className="absolute left-6 top-16 bottom-0 w-px bg-gradient-to-b from-pink-600 to-slate-700" />
-                    )}
+              {report?.interviewReport?.preparationPlan?.map((day, idx) => (
+                <div key={idx} className="flex gap-3 md:gap-6 mb-8 relative">
+                  {idx !==
+                    report?.interviewReport?.preparationPlan.length - 1 && (
+                    <div className="absolute left-5 md:left-6 top-14 bottom-0 w-px bg-gradient-to-b from-pink-600 to-slate-700" />
+                  )}
 
-                    {/* Day Circle */}
-                    <div className="relative flex-shrink-0">
-                      <div className="w-12 h-12 bg-slate-900 border-2 border-pink-600 rounded-full flex items-center justify-center">
-                        <span className="text-pink-400 font-bold text-sm">
-                          Day {day.day}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 pt-1">
-                      <h3 className="text-lg font-bold text-white mb-2">
-                        {day.title}
-                      </h3>
-                      <p className="text-sm text-gray-400 mb-3">{day.focus}</p>
-
-                      {/* Tasks */}
-                      <ul className="space-y-2">
-                        {day.tasks &&
-                          day.tasks.map((task, taskIdx) => (
-                            <li
-                              key={taskIdx}
-                              className="text-sm text-gray-300 flex items-start gap-2"
-                            >
-                              <span className="text-pink-400 mt-1">•</span>
-                              <span>{task}</span>
-                            </li>
-                          ))}
-                      </ul>
+                  <div className="relative flex-shrink-0">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-slate-900 border-2 border-pink-600 rounded-full flex items-center justify-center">
+                      <span className="text-pink-400 font-bold text-xs md:text-sm">
+                        {day.day}
+                      </span>
                     </div>
                   </div>
-                ))}
+
+                  <div className="flex-1">
+                    <h3 className="text-base md:text-lg font-bold text-white">
+                      {day.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-400 mb-3">{day.focus}</p>
+
+                    <ul className="space-y-2">
+                      {day.tasks?.map((task, i) => (
+                        <li
+                          key={i}
+                          className="text-sm text-gray-300 flex gap-2"
+                        >
+                          <span className="text-pink-400">•</span>
+                          {task}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
             </div>
           </>
         ) : (
           <>
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold text-white mb-1">
+            <div className="mb-6">
+              <h1 className="text-xl md:text-2xl font-bold text-white">
                 {activeSection === "technical"
                   ? "Technical Questions"
                   : "Behavioral Questions"}
               </h1>
+
               <p className="text-sm text-gray-400">
                 {currentQuestions.length} questions
               </p>
             </div>
 
-            {/* Questions List */}
             <div className="space-y-3">
               {currentQuestions.map((q, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-800/30 border border-slate-700 rounded-lg overflow-hidden hover:border-slate-600 transition-colors"
+                  className="bg-slate-800/30 border border-slate-700 rounded-lg"
                 >
-                  {/* Question Header - Always Visible */}
                   <button
                     onClick={() => toggleQuestion(idx)}
-                    className="w-full p-4 flex items-start justify-between gap-3 hover:bg-slate-700/20 transition-colors"
+                    className="w-full p-4 flex justify-between items-start gap-3"
                   >
-                    <div className="flex items-start gap-3 flex-1 text-left min-w-0">
-                      <span className="text-pink-500 font-bold text-sm flex-shrink-0">
+                    <div className="flex gap-3 text-left flex-1">
+                      <span className="text-pink-500 font-bold text-sm">
                         Q{idx + 1}
                       </span>
-                      <span className="text-white text-sm font-medium leading-relaxed line-clamp-2">
+
+                      <span className="text-white text-sm md:text-base break-words">
                         {q.question}
                       </span>
                     </div>
-                    <div className="flex-shrink-0 text-gray-400 mt-0.5">
-                      {expandedQuestions[idx] ? (
-                        <ChevronUp size={18} />
-                      ) : (
-                        <ChevronDown size={18} />
-                      )}
-                    </div>
+
+                    {expandedQuestions[idx] ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    )}
                   </button>
 
-                  {/* Question Details - Expandable */}
                   {expandedQuestions[idx] && (
-                    <div className="px-4 pb-4 pt-0 border-t border-slate-700/50 space-y-4">
-                      {/* Intention */}
+                    <div className="px-4 pb-4 border-t border-slate-700/50 space-y-4">
                       <div>
-                        <h4 className="text-xs font-bold bg-pink-600/20 text-pink-400 border-pink-600/30 tracking-wider mt-3 mb-2 max-w-1/9 px-1.5 rounded-xs">
+                        <h4 className="text-xs font-bold text-pink-400 mb-1">
                           INTENTION
                         </h4>
                         <p className="text-sm text-gray-300">{q.intention}</p>
                       </div>
 
-                      {/* Model Answer */}
                       <div>
-                        <h4 className="text-xs font-bold bg-green-600/20 text-green-300 border-green-600/30 max-w-1/6 px-2 rounded-sm tracking-wider mb-2 ">
+                        <h4 className="text-xs font-bold text-green-400 mb-1">
                           MODEL ANSWER
                         </h4>
                         <p className="text-sm text-gray-300">{q.answer}</p>
@@ -261,78 +238,65 @@ const Interview = () => {
         )}
       </div>
 
-      {/* Right Sidebar */}
-      <div className="w-56 bg-slate-900/50 border-l border-slate-700 p-6 flex flex-col">
-        {/* Match Score - Add null check */}
+      {/* RIGHT PANEL */}
+      <div className="w-full md:w-56 bg-slate-900/50 border-t md:border-t-0 md:border-l border-slate-700 p-4 md:p-6">
         {report?.interviewReport?.matchScore && (
-          <div className="mb-8">
-            <h3 className="text-xs font-bold text-gray-400 tracking-wider mb-6">
-              MATCH SCORE
-            </h3>
+          <div className="mb-8 text-center">
+            <h3 className="text-xs text-gray-400 mb-4">MATCH SCORE</h3>
 
-            <div className="flex flex-col items-center justify-center">
-              {/* Circular Progress */}
-              <div className="relative w-32 h-32 mb-4">
-                <svg
-                  className="w-full h-full transform -rotate-90"
-                  viewBox="0 0 120 120"
-                >
-                  {/* Background Circle */}
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="56"
-                    fill="none"
-                    stroke="rgba(148, 163, 184, 0.1)"
-                    strokeWidth="4"
-                  />
-                  {/* Progress Circle */}
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="56"
-                    fill="none"
-                    stroke="#10b981"
-                    strokeWidth="4"
-                    strokeDasharray={`${(report?.interviewReport?.matchScore / 100) * 351.86} 351.86`}
-                    strokeLinecap="round"
-                    className="transition-all duration-500"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-white">
-                      {`${report?.interviewReport?.matchScore} %`}
-                    </div>
-                  </div>
-                </div>
+            <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4">
+              <svg
+                className="w-full h-full transform -rotate-90"
+                viewBox="0 0 120 120"
+              >
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="56"
+                  fill="none"
+                  stroke="rgba(148,163,184,0.1)"
+                  strokeWidth="4"
+                />
+
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="56"
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth="4"
+                  strokeDasharray={`${
+                    (report?.interviewReport?.matchScore / 100) * 351.86
+                  } 351.86`}
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg md:text-2xl font-bold text-white">
+                  {report?.interviewReport?.matchScore}%
+                </span>
               </div>
-
-              <p className="text-sm text-green-400 font-medium text-center">
-                Strong match for this role
-              </p>
             </div>
+
+            <p className="text-green-400 text-sm">Strong match for this role</p>
           </div>
         )}
 
-        {/* Skill Gaps - Add null check */}
-        <div className="flex-1">
-          <h3 className="text-xs font-bold text-gray-400 tracking-wider mb-4">
-            SKILL GAPS
-          </h3>
+        <div>
+          <h3 className="text-xs text-gray-400 mb-3">SKILL GAPS</h3>
 
-          <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-            {report?.interviewReport?.skillGaps &&
-              report?.interviewReport?.skillGaps.map((gap, idx) => (
-                <div
-                  key={idx}
-                  className={`inline-block px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${getSeverityColor(
-                    gap.severity,
-                  )}`}
-                >
-                  {gap.skill}
-                </div>
-              ))}
+          <div className="flex flex-wrap gap-2">
+            {report?.interviewReport?.skillGaps?.map((gap, idx) => (
+              <div
+                key={idx}
+                className={`px-3 py-2 rounded-lg text-xs border ${getSeverityColor(
+                  gap.severity,
+                )}`}
+              >
+                {gap.skill}
+              </div>
+            ))}
           </div>
         </div>
       </div>
